@@ -1,0 +1,24 @@
+---
+- name: Istalacion de software
+  hosts: all
+  become: yes
+  vars_files:
+    - rocky.yaml
+    - debian.yaml
+  ignore_unreachable: yes
+  tasks:
+    - name: Instalar software en servidores Rocky
+      dnf:
+        name: "{{item}}"
+        state: present
+      loop:
+        "{{software_rocky}}"
+      when: ansible_distribution == "Rocky"
+
+    - name: Instalar software en servidores Debian
+      apt:
+        name: "{{item}}"
+        state: present
+      loop:
+        "{{software_debian}}"
+      when: ansible_distribution == "Debian"    
